@@ -1,0 +1,45 @@
+services:
+  oracle19cdb:
+    image: simonangelfong/oracledb19c:1.0
+    restart: always
+    ports:
+      - 1521:1521
+      - 5500:5500
+    env_file:
+      - ./.env
+    environment:
+      ORACLE_SID: ${ORACLE_SID}
+      ORACLE_PDB: ${ORACLE_PDB}
+      ORACLE_PWD: ${ORACLE_PWD}
+    networks:
+      - public
+      - private
+    volumes:
+      - oracledata:/opt/oracle/oradata
+      - ./start:/opt/oracle/scripts/startup
+
+  fastapi:
+    build: .
+    environment:
+      DB_HOST: oracle19cdb
+      DB_PDB: toronto_shared_bike
+      DB_USER: api_tester
+      DB_PASSWORD: Welcome!234
+    ports:
+      - 8080:8080
+    networks:
+      - private
+      - public # both private and public
+    depends_on:
+      - oracle19cdb
+
+volumes:
+  oracledata:
+networks:
+  public:
+  private:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "10.1.0.0/19"
+          gateway: "10.1.0.1"

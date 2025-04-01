@@ -2,17 +2,6 @@
 
 A repo to learn FastAPI
 
-
-```sh
-fastapi dev main.py
-
-pip freeze > requirements.txt
-
-
-docker build -t myimage .
-docker rmi myimage
-
-docker run -d --name mycontainer -p 8080:8080 myimage
-docker rm mycontainer
-docker container stop mycontainer
-```
+- [Docker](./docker/README.md)
+- [Docker Compose](./docker-compose/README.md)
+- [Connect to Oracle Database](./oracledb/README.md)
